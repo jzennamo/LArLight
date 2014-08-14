@@ -5,6 +5,7 @@
 #include "FluxRWnubar/FluxRWnubar.hh"
 #include "Rtypes.h"
 #include "TVector3.h"
+#include "TRandom3.h"
 #include "LorentzVectorLight.hh"
 #include <vector>
 #include "TDecompLU.h"
@@ -28,8 +29,17 @@ namespace lar1{
     Double_t NuEnergyCCQE( Double_t l_energy, Double_t l_p, Double_t l_theta, Double_t mass, Int_t mode, bool verbose = false );
     Double_t NuEnergyCalo( std::vector<Int_t> *pdg, std::vector<Double_t> *energy, 
   			 Bool_t include_neutrons = false, Bool_t include_pizeros = false, Double_t prot_thresh = 0, bool verbose = false );
+
+    Double_t NuEnergyCaloSmeared( std::vector<Int_t> *pdg, std::vector<Double_t> *energy, 
+				  Bool_t include_neutrons = false, Bool_t include_pizeros = false, 
+				  Double_t prot_thresh = 0, bool verbose = false, 
+				  double lep_E_smeared, double lep_E_true, std::string LEP);
+
+    Double_t MuE_Res(bool contained, Double_t  energy, Double_t track_L);
+
     Double_t VertexEnergy( std::vector<Int_t> *pdg, std::vector<Double_t> *energy, 
   			 Double_t prot_thresh = 0.0, Double_t pion_thresh = 0.0, bool verbose = false );
+
     Double_t TotalPhotonEnergy( Int_t idet, 
                                 std::vector<gan::LorentzVectorLight> *p1pos,
                                 std::vector<gan::LorentzVectorLight> *p1mom,

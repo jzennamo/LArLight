@@ -3,6 +3,7 @@
 #include "TH1F.h"
 #include "TH1D.h"
 
+
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -468,6 +469,63 @@ namespace lar1{
     
   }
 
+  //=========================================================================================
+  // Calorimetric energy reconstruction with smearing
+  //=========================================================================================
+
+  Double_t NuEnergyCalo_smeared(std::vector<Int_t> *pdg, std::vector<Double_t> *energy,
+				Bool_t include_neutrons, Bool_t include_pizeros,
+				Double_t prot_thresh,  bool verbose, 
+				double lep_E_smeared, double lep_E_true, 
+				std::string LEP){
+
+
+
+    float M_n = .939565;    // GeV/c2
+    float M_p = .938272;    // GeV/c2
+    double total_energy = 0;
+    float HadronicRes = 0.05;
+    TRandom *smear = new TRandom3(0);
+
+    if(lep_E_smeared == 0){return total_energy;}
+
+    for( unsigned int i = 0; i < pdg->size(); ++i ){
+   
+
+      if( abs(pdg->at(i)) > 5000 ) continue;                           // ignore nuclear fragments
+      if( abs(pdg->at(i)) == 12 || abs(pdg->at(i)) == 14 ) continue;   // ignore neutrinos
+
+      if( !include_neutrons && abs(pdg->at(i)) == 2112 ) continue;                // neutrons
+      if( !include_pizeros  && abs(pdg->at(i)) == 111  ) continue;                // pizeros
+      if( abs(pdg->at(i)) == 2212 && energy->at(i)-M_p < prot_thresh ) continue;  // proton threshold
+    
+
+      if(LEP == "muon" && abs(pdg->at(i)) == 13){ 
+      
+	total_energy += (smeared_lep_E); 
+	continue;
+
+      }
+      if(LEP == "electron" && abs(pdg->at(i)) == 11){
+
+	std::cout << "You don't have any electron smearing yet..." << std::endl;
+	continue;
+
+      }
+       
+      total_energy += (smear->Gaus(energy->at(i), HadronicRes*energy->at(i)));
+
+      if( abs(pdg->at(i)) == 2212 ) total_energy -= M_p;
+      if( abs(pdg->at(i)) == 2112 ) total_energy -= M_n;
+
+    }
+
+    delete smear;
+    return total_energy;
+  
+  
+  }
+
 
   //=========================================================================================
   // Get the visible energy near the interaction vertex
@@ -839,7 +897,6 @@ namespace lar1{
 
   }
 
-
   // bool PhotonsAreParallel(TVector3 & photon1_start, TVector3 & photon1_mom
   //                         TVector3 & photon2_start, TVector3 & photon2_mom)
   // {
@@ -850,7 +907,36 @@ namespace lar1{
 
 
   //###########################################################################################
+  //
+  //                        Muon Energy Smearing
+  //
+  //###########################################################################################
+ 
+  Double_t Utils::MuE_Res(bool contained, Double_t  energy, Double_t track_L){
+  
+    Double_t smeared_energy;
+    Double_t Res;
+    TRandom *smear = new TRandom3(0);
 
-}
+  
+    if(contained){    
+      //Assumes resolution of 2% for stopped muons
+      Res = 0.02;
+      smeared_energy = smear->Gaus(energy, Res*energy);
+    }
+    else{ 
+      if(track_L > 100){
+	Res = -0.102*log(0.000612*track_L);
+	smeared_energy = smear->Gaus(energy, Res*energy);}
+      else{smeared_energy = 0; HowMeasuresed = 0;}
+    }
+
+    delete smear;
+  
+    return smeared_energy; 
+  
+  }//
+
+
 
 
