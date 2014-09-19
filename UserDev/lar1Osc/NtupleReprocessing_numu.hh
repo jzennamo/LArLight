@@ -5,8 +5,8 @@
 // found on file: ntuple_example.root
 //////////////////////////////////////////////////////////
 
-#ifndef NtupleReprocessing_h
-#define NtupleReprocessing_h
+#ifndef NtupleReprocessing_numu_h
+#define NtupleReprocessing_numu_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -23,7 +23,7 @@
 
 namespace lar1{
 
-  class NtupleReprocessing {
+  class NtupleReprocessing_numu {
 
    public :
 
@@ -48,12 +48,12 @@ namespace lar1{
     Char_t          FoundPhotons;
     Int_t           isCC;
     Int_t           mode;
-    //Entries involving genie FSP:
-    std::vector<Int_t>     *geniePDG;
-    std::vector<Double_t>  *genieE;
-    std::vector<Double_t>  *geniePx;
-    std::vector<Double_t>  *geniePy;
-    std::vector<Double_t>  *geniePz; 
+    //Entries involving Genie FSP:
+    std::vector<Int_t>     *GeniePDG;
+    std::vector<Double_t>  *GenieE;
+    std::vector<Double_t>  *GeniePx;
+    std::vector<Double_t>  *GeniePy;
+    std::vector<Double_t>  *GeniePz; 
     Double_t        Vx;
     Double_t        Vy;
     Double_t        Vz;
@@ -113,11 +113,11 @@ namespace lar1{
     TBranch        *b_ParPx;   //!
     TBranch        *b_ParPy;   //!
     TBranch        *b_ParPz;   //!
-    TBranch        *b_geniePDG; //!
-    TBranch        *b_genieE; //!
-    TBranch        *b_geniePx; //!
-    TBranch        *b_geniePy; //!
-    TBranch        *b_geniePz; //!
+    TBranch        *b_GeniePDG; //!
+    TBranch        *b_GenieE; //!
+    TBranch        *b_GeniePx; //!
+    TBranch        *b_GeniePy; //!
+    TBranch        *b_GeniePz; //!
     TBranch        *b_ThetaLep;   //!
     TBranch        *b_PhiLep;   //!
     TBranch        *b_ThetaLepSmeared;   //!
@@ -138,8 +138,8 @@ namespace lar1{
     // TBranch        *b_chargedPionMom;
     // TBranch        *b_chargedPionSign;
 
-    NtupleReprocessing(TString file = "");
-    virtual ~NtupleReprocessing();
+    NtupleReprocessing_numu(TString file = "");
+    virtual ~NtupleReprocessing_numu();
     virtual Int_t    Cut(Long64_t entry);
     virtual Int_t    GetEntry(Long64_t entry);
     virtual Long64_t LoadTree(Long64_t entry);
@@ -169,14 +169,14 @@ namespace lar1{
 
   };
 }
-#endif // #ifdef NtupleReprocessing_h
+#endif // #ifdef NtupleReprocessing_numu_h
 
 
-#ifdef NtupleReprocessing_cxx
+#ifdef NtupleReprocessing_numu_cxx
 
 
 namespace lar1{
-  NtupleReprocessing::NtupleReprocessing(TString file) : fChain(0) {
+  NtupleReprocessing_numu::NtupleReprocessing_numu(TString file) : fChain(0) {
 
     // if parameter tree is not specified (or zero), connect the file
     // used to generate this class and read the Tree.
@@ -212,13 +212,13 @@ namespace lar1{
 
   }
 
-  NtupleReprocessing::~NtupleReprocessing()
+  NtupleReprocessing_numu::~NtupleReprocessing_numu()
   {
      if (!fChain) return;
      delete fChain->GetCurrentFile();
   }
 
-  Int_t NtupleReprocessing::GetEntry(Long64_t entry)
+  Int_t NtupleReprocessing_numu::GetEntry(Long64_t entry)
   {
   // Read contents of entry.
      if (!fChain) return 0;
@@ -226,7 +226,7 @@ namespace lar1{
      return returnVal;
   }
 
-  Long64_t NtupleReprocessing::LoadTree(Long64_t entry)
+  Long64_t NtupleReprocessing_numu::LoadTree(Long64_t entry)
   {
   // Set the environment to read one entry
      if (!fChain) return -5;
@@ -239,7 +239,7 @@ namespace lar1{
      return centry;
   }
 
-  void NtupleReprocessing::Init(TTree *tree)
+  void NtupleReprocessing_numu::Init(TTree *tree)
   {
      // The Init() function is called when the selector needs to initialize
      // a new tree or chain. Typically here the branch addresses and branch
@@ -260,11 +260,11 @@ namespace lar1{
      miscPhotonConversionMom = 0;
      PionPos = 0;
      PionMom = 0;
-     geniePDG = 0;
-     genieE = 0;
-     geniePx = 0;
-     geniePy = 0;
-     geniePz = 0;
+     GeniePDG = 0;
+     GenieE = 0;
+     GeniePx = 0;
+     GeniePy = 0;
+     GeniePz = 0;
 
      // chargedPionSign = 0;
      // chargedPionPos = 0;
@@ -296,11 +296,11 @@ namespace lar1{
      fChain->SetBranchAddress("Vy", &Vy, &b_Vy);
      fChain->SetBranchAddress("Vz", &Vz, &b_Vz);
 
-     fChain->SetBranchAddress("GeniePDG", &geniePDG, &b_geniePDG);
-     fChain->SetBranchAddress("GenieE",   &genieE, &b_genieE);
-     fChain->SetBranchAddress("GeniePx", &geniePx, &b_geniePx);
-     fChain->SetBranchAddress("GeniePy", &geniePy, &b_geniePy);
-     fChain->SetBranchAddress("GeniePz", &geniePz, &b_geniePz);
+     fChain->SetBranchAddress("GeniePDG", &GeniePDG, &b_GeniePDG);
+     fChain->SetBranchAddress("GenieE",   &GenieE, &b_GenieE);
+     fChain->SetBranchAddress("GeniePx", &GeniePx, &b_GeniePx);
+     fChain->SetBranchAddress("GeniePy", &GeniePy, &b_GeniePy);
+     fChain->SetBranchAddress("GeniePz", &GeniePz, &b_GeniePz);
 
      fChain->SetBranchAddress("ParVx", &ParVx, &b_ParVx);
      fChain->SetBranchAddress("ParVy", &ParVy, &b_ParVy);
@@ -332,7 +332,7 @@ namespace lar1{
      Notify();
   }
 
-  Bool_t NtupleReprocessing::Notify()
+  Bool_t NtupleReprocessing_numu::Notify()
   {
      // The Notify() function is called when a new file is opened. This
      // can be either for a new TTree in a TChain or when when a new TTree
@@ -343,7 +343,7 @@ namespace lar1{
      return kTRUE;
   }
 
-  void NtupleReprocessing::Show(Long64_t entry)
+  void NtupleReprocessing_numu::Show(Long64_t entry)
   {
   // Print contents of entry.
   // If entry is not specified, print current entry
@@ -351,7 +351,7 @@ namespace lar1{
      fChain->Show(entry);
   }
 
-  Int_t NtupleReprocessing::Cut(Long64_t entry)
+  Int_t NtupleReprocessing_numu::Cut(Long64_t entry)
   {
   // This function may be called from Loop.
   // returns  1 if entry is accepted.
@@ -361,13 +361,13 @@ namespace lar1{
      else return 1;
   }
 
-  TString NtupleReprocessing::InFile(){
+  TString NtupleReprocessing_numu::InFile(){
 
     return infile->GetName();
 
   }
 
-  Double_t NtupleReprocessing::CalcLepton( Double_t detect_dist )
+  Double_t NtupleReprocessing_numu::CalcLepton( Double_t detect_dist )
   {
 
     LepPx = 0.0;
@@ -377,14 +377,14 @@ namespace lar1{
 
     // loop over Genie vectors and find the lepton.  These are 11, 12, 13, 14 and negatives.
 
-    for( unsigned long i = 0; i < geniePDG->size(); i++ ){
-      //std::cout << "GENIE PDG: " << geniePDG->at(i) << std::endl;
-      if( abs(geniePDG->at(i)) == 11 || abs(geniePDG->at(i)) == 12 ||
-  	      abs(geniePDG->at(i)) == 13 || abs(geniePDG->at(i)) == 14 ){
+    for( unsigned long i = 0; i < GeniePDG->size(); i++ ){
+      //std::cout << "GENIE PDG: " << GeniePDG->at(i) << std::endl;
+      if( abs(GeniePDG->at(i)) == 11 || abs(GeniePDG->at(i)) == 12 ||
+  	      abs(GeniePDG->at(i)) == 13 || abs(GeniePDG->at(i)) == 14 ){
         
-        LepPx = geniePx->at(i);
-        LepPy = geniePy->at(i);
-        LepPz = geniePz->at(i);
+        LepPx = GeniePx->at(i);
+        LepPy = GeniePy->at(i);
+        LepPz = GeniePz->at(i);
       }
     }
 
@@ -397,7 +397,7 @@ namespace lar1{
 
   }
 
-  Int_t NtupleReprocessing::DisableDetSign(Int_t sign){
+  Int_t NtupleReprocessing_numu::DisableDetSign(Int_t sign){
 
     if (sign == 1 ){
       detNeutrinos = false;
@@ -411,7 +411,7 @@ namespace lar1{
     }
     return sign;
   }
-  Int_t NtupleReprocessing::DisableOscSign(Int_t sign){
+  Int_t NtupleReprocessing_numu::DisableOscSign(Int_t sign){
 
     if (sign == 1 ){
       oscNeutrinos = false;
@@ -426,9 +426,9 @@ namespace lar1{
     return sign;
   }
 
-  void NtupleReprocessing::SetSpecialNameText(std::string s){
+  void NtupleReprocessing_numu::SetSpecialNameText(std::string s){
     specialNameText = s;
   }
 }//namespace lar1
 
-#endif // #ifdef NtupleReprocessing_cxx
+#endif // #ifdef NtupleReprocessing_numu_cxx
