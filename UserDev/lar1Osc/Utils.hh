@@ -33,7 +33,7 @@ namespace lar1{
     Double_t NuEnergyCaloSmeared( std::vector<Int_t> *pdg, std::vector<Double_t> *energy, 
 				  Bool_t include_neutrons = false, Bool_t include_pizeros = false, 
 				  Double_t prot_thresh = 0, bool verbose = false, 
-				  double lep_E_smeared = 0, double lep_E_true = 0, std::string LEP = "elec" );
+				  double lep_E_smeared, double lep_E_true, std::string LEP);
 
     Double_t MuE_Res(bool contained, Double_t  energy, Double_t track_L);
 
@@ -72,7 +72,7 @@ namespace lar1{
                              const TVector3 & planeCorner1,
                              const TVector3 & planeCorner2,
                              const TVector3 & planeCorner3,
-                             const bool verbose = false);
+                             const bool verbose = false) const;
 
    private:
 

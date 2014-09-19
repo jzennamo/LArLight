@@ -502,7 +502,7 @@ namespace lar1{
 
       if(LEP == "muon" && abs(pdg->at(i)) == 13){ 
       
-	total_energy += (lep_E_smeared); 
+	total_energy += (smeared_lep_E); 
 	continue;
 
       }
@@ -792,29 +792,29 @@ namespace lar1{
   // 
   //Find out if line intersects the plane
   // 
-
   Bool_t Utils::IntersectsPlane(const TVector3 & startPos, const TVector3 & startDir,
-				const TVector3 & planeCorner1,
-				const TVector3 & planeCorner2,
-				const TVector3 & planeCorner3,
-				const bool verbose){
-    
+                                const TVector3 & planeCorner1,
+                                const TVector3 & planeCorner2,
+                                const TVector3 & planeCorner3,
+                                const bool verbose) const{
+                                // ) const{
+
     if (startDir.Mag() == 0) return false;
- 
-    // a and b are defined to be vectors parallel to the plane
+
+    // a and b are defined to be vectors parallel to the plane:
     TVector3 a = planeCorner2 - planeCorner1;
     TVector3 b = planeCorner3 - planeCorner1;
-   
+
     // Normal vector to the plane
     TVector3 n = a.Cross(b);
-  
+
     //Check that the Normal vector isn't 0 - that the vectors aren't parallel
     if (n.Mag() == 0){
       if (verbose) std::cout << "Error, input vectors to define the plane are parallel." << std::endl;
       return false;
     }
 
-  
+
     // Any point on the plane can be parametrized with the following equation:
     // p = planeCorner1 + u*a + v*b
     // Any point on the line can be parametrized with:
@@ -833,7 +833,7 @@ namespace lar1{
       if (verbose) std::cout << "Direction is parallel to the plane, exiting." << std::endl;
       return false;
     }
-  
+    
     // Create the matrix:
     TMatrixD mat(3,3);
     // format is mat(row_n, col_n)
@@ -848,6 +848,7 @@ namespace lar1{
     mat(2,2) = b.Z();
 
     TMatrix inv = mat.Invert();
+
 
     // Create the vector to multiply.
     TMatrix t(3,1);
@@ -865,16 +866,16 @@ namespace lar1{
 
     if (result(0,0) > 0){ // Intersects in forward direction
       if (result(1,0) >= 0 && result (1,0) <= 1)
-	{
-	  if (result(2,0) >= 0 && result (2,0) <= 1)
-	    {
-	      return true;
-	    }
-	}
+      {
+        if (result(2,0) >= 0 && result (2,0) <= 1)
+        {
+          return true;
+        }
+      }
       // then success! they intersect
     }
     return false;
-  
+
   }
 
   double  Utils::GetContainedLength(TVector3 startPoint, TVector3 startDir, int idet){
@@ -927,7 +928,7 @@ namespace lar1{
       if(track_L > 100){
 	Res = -0.102*log(0.000612*track_L);
 	smeared_energy = smear->Gaus(energy, Res*energy);}
-      else{smeared_energy = 0;}
+      else{smeared_energy = 0; HowMeasuresed = 0;}
     }
 
     delete smear;
@@ -935,7 +936,7 @@ namespace lar1{
     return smeared_energy; 
   
   }//
-}
+
 
 
 

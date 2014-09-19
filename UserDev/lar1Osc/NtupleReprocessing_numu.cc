@@ -3,7 +3,7 @@
 //   Stolen and broken by Joseph Zennamo, UChicago (jzennamo@uchicago.edu), Aug 2014
 //
 //
- 
+
 #define NtupleReprocessing_numu_cxx
 #include "NtupleReprocessing_numu.hh"
 #include <TH2.h>
@@ -158,9 +158,6 @@ namespace lar1{
 
     double nu_LE_wgt = 0;
 
-    bool contained = true;
-    int iTop = 0, iChan = 0;
-
     //====================================================
     // Loop over entries in incoming ntuple
     //====================================================
@@ -214,7 +211,7 @@ namespace lar1{
       //----------------------------------------------
       // Track the muon till it exits the detector:
       //----------------------------------------------
-      
+      bool contained = true;
       unsigned int muonPosIndex = 0;
       // Make sure default values are 0:
       MuonExitPos *= 0.0;
@@ -293,8 +290,7 @@ namespace lar1{
     f->Close();
 
 
-  }   
-
+  }
 
 }// namespace lar1
 
